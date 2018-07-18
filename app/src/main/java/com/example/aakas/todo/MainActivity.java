@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         expenseDAO = database.getExpenseDao();
         expenses = expenseDAO.getExpenses();
 
+
+
 //        ExpenseOpenHelper openHelper = new ExpenseOpenHelper(this);
 //        SQLiteDatabase database = openHelper.getReadableDatabase();
 //

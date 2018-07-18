@@ -31,7 +31,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".SetAlarmFAB"></activity>
+        <activity android:name=".SetAlarmFAB" />
+        <activity android:name=".SMSaddtodo"></activity>
     </application>
 
 </manifest>
