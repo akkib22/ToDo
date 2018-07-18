@@ -14,10 +14,10 @@ import java.util.List;
 
 public class ExpenseAdapter extends ArrayAdapter {
 
-    ArrayList<Expense> items;
+    List<Expense> items;
     LayoutInflater inflater;
 
-    public ExpenseAdapter(@NonNull Context context, ArrayList<Expense> items) {
+    public ExpenseAdapter(@NonNull Context context, List<Expense> items) {
         super(context, 0,  items);
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

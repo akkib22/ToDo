@@ -1,5 +1,6 @@
 package com.example.aakas.todo;
 
+import android.arch.persistence.room.Room;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,11 +21,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
-    ArrayList<Expense> expenses = new ArrayList<>();
+    List<Expense> expenses = new ArrayList<>();
     ExpenseAdapter adapter;
+    ExpenseDAO expenseDAO;
 
 
     @Override
@@ -34,19 +37,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         ListView listView = findViewById(R.id.listview);
 
-        ExpenseOpenHelper openHelper = new ExpenseOpenHelper(this);
-        SQLiteDatabase database = openHelper.getReadableDatabase();
 
-        Cursor cursor = database.query("expense_table",null,null,null,null,null,null);
+        ExpenseDatabase database = Room.databaseBuilder(getApplicationContext(),ExpenseDatabase.class,"expenses_db").allowMainThreadQueries().build();
+        expenseDAO = database.getExpenseDao();
+        expenses = expenseDAO.getExpenses();
 
-        while(cursor.moveToNext()){
-
-            String name = cursor.getString(cursor.getColumnIndex(Contract.expense.COLUM_NAME));
-            int amount = cursor.getShort(cursor.getColumnIndex(Contract.expense.COLUM_AMOUNT));
-
-            Expense expense = new Expense(name, amount);
-            expenses.add(expense);
-        }
+//        ExpenseOpenHelper openHelper = new ExpenseOpenHelper(this);
+//        SQLiteDatabase database = openHelper.getReadableDatabase();
+//
+//        Cursor cursor = database.query("expense_table",null,null,null,null,null,null);
+//
+//        while(cursor.moveToNext()){
+//
+//            String name = cursor.getString(cursor.getColumnIndex(Contract.expense.COLUM_NAME));
+//            int amount = cursor.getShort(cursor.getColumnIndex(Contract.expense.COLUM_AMOUNT));
+//
+//            Expense expense = new Expense(name, amount);
+//            expenses.add(expense);
+//        }
 
 
        /* for(int i = 0;i<10;i++){
@@ -58,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         //ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.expense_row_layout,R.id.expenseName,expenses);
 
-        adapter = new ExpenseAdapter(this,expenses);
+        adapter = new ExpenseAdapter(this, expenses);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(this);
@@ -141,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Expense expense = new Expense(title,amount);
                 expense.setName(title);
                 expense.setAmount(amount);
+                expenseDAO.addExpenses(expense);
 
                 expenses.add(expense);
                 adapter.notifyDataSetChanged();
@@ -154,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Expense expense = new Expense(title,amount);
                 expense.setName(title);
                 expense.setAmount(amount);
+                expenseDAO.addExpenses(expense);
 
 
 
